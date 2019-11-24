@@ -1,5 +1,5 @@
 # data-science-tools
-Collection of various data science tools and methods that I've picked up over the years
+Collection of various data science tools, methods and tricks that I've picked up over the years. :)
 
 ## TODO
 Make Jupyter Notebook versions at some point, but for starters I can just copy/paste to where I need stuff.
