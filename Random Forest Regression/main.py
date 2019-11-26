@@ -22,13 +22,20 @@ def time_to_seconds(time):
     return time.hour * 3600 + time.minute * 60 + time.second
 
 
-# read the data file
-df = pd.read_csv("./data/data.csv")
+# define a list of typical missing values -- a dict can carry column specific NaN values
+missing_values = ["n/a", "na", "--", "?"]
+# read the data file - and encode missing values as np.nan
+df = pd.read_csv("./data/data.csv", na_values=missing_values)
 # Drop columns
 df = df.drop("date", axis=1)
 # Index(['number_people', 'timestamp', 'day_of_week', 'is_weekend', 'is_holiday', 'temperature', 'is_start_of_semester',
 # 'is_during_semester', 'month', 'hour'], dtype = 'object')
 print(df.columns)
+
+# Numpy uses NaN, Pandas can find them wither either .isnull() or .isna()
+print("Total number of missing values")
+print(df.isnull().sum())  # We could also have used df.isna().sum()
+# Good, no missing values.
 
 # center timestamp
 noon = time_to_seconds(time(12, 0, 0))
