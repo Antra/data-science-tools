@@ -17,3 +17,11 @@ num_dtypes = ['int64', 'float64', 'int32', 'float32']
 num_cols = df.select_dtypes([np.number]).columns.tolist()
 
 print("The following columns are numeric:", num_cols)
+
+# Straighten/streamline column values with mapping
+value_map = {'W': 'West', 'E': 'East', 'N': 'North', 'S': 'South',
+             'w': 'West', 'e': 'East', 'n': 'North', 's': 'South'}
+# without na_action values not in the dict will be changed to NaN
+df['POS'] = df['POS'].map(value_map, na_action='ignore')
+
+print(df.head())

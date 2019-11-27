@@ -4,6 +4,12 @@ Collection of various data science tools, methods and tricks that I've picked up
 ## TODO
 Make Jupyter Notebook versions at some point, but for starters I can just copy/paste to where I need stuff.
 
+# Cleaning
+- Deal with missing values, outliers and duplicates
+  - drop missing rows/columns
+  - replace missing values with 0/mean/median or something else appropriate
+- Drop irrelevant and 'dangerous' columns
+
 # Random Forest Regression
 My Random Forest Regressor example is from [Kaggle](https://www.kaggle.com/nsrose7224/random-forest-regressor-accuracy-0-91).  
 
