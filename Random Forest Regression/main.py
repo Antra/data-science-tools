@@ -7,8 +7,11 @@ import os  # access os commands, for checking folders
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+import sklearn.metrics as sklm
+import scipy.stats as ss
 
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 from subprocess import check_output
 from datetime import time
@@ -91,3 +94,83 @@ print(scores)
 
 # from Kaggle but without scaling -- difference is negligible, but it can make the model very vulnerable to high-value features
 #[0.9073091037173004, 0.9117271973020955, 0.9134276558222074, 0.9149089218418027, 0.9146367394753295, 0.9167258249950438, 0.9151800535573515, 0.9162655888021767, 0.9165045474833977, 0.91607739466341, 0.9161604756415774, 0.9160704574077145, 0.9169646947491383, 0.9171442074438759, 0.9172018808756496, 0.917392225747372, 0.9168447733468765, 0.9170469690592035, 0.9170299413806312]
+
+
+# build the actual model with the good number of estimators
+rf = RandomForestRegressor(n_estimators=10)
+# Fit the model on the training data.
+rf.fit(X_train, y_train)
+# And score it on the testing data.
+y_score = rf.score(X_test, y_test)
+print(y_score)
+
+
+# Let's get some stats
+def print_metrics(y_true, y_predicted, n_parameters):
+    # First compute R^2 and the adjusted R^2
+    r2 = sklm.r2_score(y_true, y_predicted)
+    r2_adj = r2 - (n_parameters - 1) / \
+        (y_true.shape[0] - n_parameters) * (1 - r2)
+
+    # Print the usual metrics and the R^2 values
+    print('Mean Square Error      = ' +
+          str(sklm.mean_squared_error(y_true, y_predicted)))
+    print('Root Mean Square Error = ' +
+          str(math.sqrt(sklm.mean_squared_error(y_true, y_predicted))))
+    print('Mean Absolute Error    = ' +
+          str(sklm.mean_absolute_error(y_true, y_predicted)))
+    print('Median Absolute Error  = ' +
+          str(sklm.median_absolute_error(y_true, y_predicted)))
+    print('R^2                    = ' + str(r2))
+    print('Adjusted R^2           = ' + str(r2_adj))
+
+
+print_metrics(y_test, y_score, len(df.columns))
+
+
+# and some graphs
+# plot the residuals
+def hist_resids(y_test, y_score):
+    # first compute vector of residuals.
+    resids = np.subtract(y_test.reshape(-1, 1), y_score.reshape(-1, 1))
+    # now make the residual plots
+    sns.distplot(resids)
+    plt.title('Histogram of residuals')
+    plt.xlabel('Residual value')
+    plt.ylabel('count')
+    plt.show()
+
+
+# Plot the Q-Q Normal plot
+def resid_qq(y_test, y_score):
+    # first compute vector of residuals.
+    resids = np.subtract(y_test.reshape(-1, 1), y_score.reshape(-1, 1))
+    # now make the residual plots
+    ss.probplot(resids.flatten(), plot=plt)
+    plt.title('Residuals vs. predicted values')
+    plt.xlabel('Predicted values')
+    plt.ylabel('Residual')
+    plt.show()
+
+
+# Scatter plot the residuals
+def resid_plot(y_test, y_score):
+    # first compute vector of residuals.
+    resids = np.subtract(y_test.reshape(-1, 1), y_score.reshape(-1, 1))
+    # now make the residual plots
+    sns.regplot(y_score, resids, fit_reg=False)
+    plt.title('Residuals vs. predicted values')
+    plt.xlabel('Predicted values')
+    plt.ylabel('Residual')
+    plt.show()
+
+
+hist_resids(y_test, y_score)
+resid_qq(y_test, y_score)
+resid_plot(y_test, y_score)
+
+
+# The RF algorithm can also return the weight/importance of the features
+imp_features = dict(zip(df.columns, rf.feature_importances_))
+for key, value in sorted(imp_features.items(), key=lambda x: x[1], reverse=True):
+    print(f'{key} : {value}')
