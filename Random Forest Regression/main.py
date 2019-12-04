@@ -9,6 +9,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import sklearn.metrics as sklm
 import scipy.stats as ss
+import math
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -103,6 +104,8 @@ rf.fit(X_train, y_train)
 # And score it on the testing data.
 y_score = rf.score(X_test, y_test)
 print(y_score)
+# and get some predictions for comparison
+y_pred = rf.predict(X_test)
 
 
 # Let's get some stats
@@ -125,14 +128,14 @@ def print_metrics(y_true, y_predicted, n_parameters):
     print('Adjusted R^2           = ' + str(r2_adj))
 
 
-print_metrics(y_test, y_score, len(df.columns))
+print_metrics(y_test, y_pred, len(df.columns))
 
 
 # and some graphs
 # plot the residuals
-def hist_resids(y_test, y_score):
+def hist_resids(y_true, y_predict):
     # first compute vector of residuals.
-    resids = np.subtract(y_test.reshape(-1, 1), y_score.reshape(-1, 1))
+    resids = np.subtract(y_true.reshape(-1, 1), y_predict.reshape(-1, 1))
     # now make the residual plots
     sns.distplot(resids)
     plt.title('Histogram of residuals')
@@ -142,9 +145,9 @@ def hist_resids(y_test, y_score):
 
 
 # Plot the Q-Q Normal plot
-def resid_qq(y_test, y_score):
+def resid_qq(y_true, y_predict):
     # first compute vector of residuals.
-    resids = np.subtract(y_test.reshape(-1, 1), y_score.reshape(-1, 1))
+    resids = np.subtract(y_true.reshape(-1, 1), y_predict.reshape(-1, 1))
     # now make the residual plots
     ss.probplot(resids.flatten(), plot=plt)
     plt.title('Residuals vs. predicted values')
@@ -154,20 +157,20 @@ def resid_qq(y_test, y_score):
 
 
 # Scatter plot the residuals
-def resid_plot(y_test, y_score):
+def resid_plot(y_true, y_predict):
     # first compute vector of residuals.
-    resids = np.subtract(y_test.reshape(-1, 1), y_score.reshape(-1, 1))
+    resids = np.subtract(y_true.reshape(-1, 1), y_predict.reshape(-1, 1))
     # now make the residual plots
-    sns.regplot(y_score, resids, fit_reg=False)
+    sns.regplot(y_predict, resids, fit_reg=False)
     plt.title('Residuals vs. predicted values')
     plt.xlabel('Predicted values')
     plt.ylabel('Residual')
     plt.show()
 
 
-hist_resids(y_test, y_score)
-resid_qq(y_test, y_score)
-resid_plot(y_test, y_score)
+hist_resids(y_test, y_pred)
+resid_qq(y_test, y_pred)
+resid_plot(y_test, y_pred)
 
 
 # The RF algorithm can also return the weight/importance of the features
