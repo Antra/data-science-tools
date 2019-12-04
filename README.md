@@ -10,6 +10,12 @@ Make Jupyter Notebook versions at some point, but for starters I can just copy/p
   - replace missing values with 0/mean/median or something else appropriate
 - Drop irrelevant and 'dangerous' columns
 
+# Linear Regression
+Score with sklearn.metrics and get:
+- Mean Absolute Error (MAE) - the mean of the absolute value of the error
+- Mean Square Error (MSE) - the mean of the squared errors
+- Root Mean Square Error (RMSE) - the root of the mean of the squared errors
+
 # Random Forest Regression
 My Random Forest Regressor example is from [Kaggle](https://www.kaggle.com/nsrose7224/random-forest-regressor-accuracy-0-91).  
 
