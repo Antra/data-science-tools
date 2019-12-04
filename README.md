@@ -16,6 +16,17 @@ Score with sklearn.metrics and get:
 - Mean Square Error (MSE) - the mean of the squared errors
 - Root Mean Square Error (RMSE) - the root of the mean of the squared errors
 
+# Logistic Regression
+To run Logistic Regression, the non-numeric columns need to be encoded. Two popular apporaches are:
+- Label Encoding: a different number is assigned to each unique value in the feature column
+  - the issue here is the assumptions that the labels represent ordinality
+- One Hot Encoding: a new (Boolean) feature column is created for each unique value in the column with the value 1 if the value was present for that observation and otherwise 0
+  - the issue here is that it can lead to an explosion of columns (and thus the Curse of Dimensionality)
+
+
+A good performance can often be found in a mixture of the two.
+
+
 # Random Forest Regression
 My Random Forest Regressor example is from [Kaggle](https://www.kaggle.com/nsrose7224/random-forest-regressor-accuracy-0-91).  
 
