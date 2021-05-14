@@ -1,0 +1,2 @@
+Number of lines: 8
+Number of lines with python: 1
