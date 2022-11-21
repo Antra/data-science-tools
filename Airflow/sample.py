@@ -2,6 +2,7 @@ from airflow import DAG
 from datetime import datetime, timedelta
 from airflow.operators.python import PythonOperator
 from airflow.models import Variable
+from airflow.utils.edgemodifier import Label
 
 
 def _extract():
@@ -48,3 +49,7 @@ with DAG(dag_id="my_dag", description="DAG for showing nothing.",
     #     task_id="extract_env",
     #     python_callable=_extract_env
     # )
+
+    # specify the order with ">>" and "<<" or ".setdownstream()" and ".setupstream()"
+    extract >> Label("then run this") >> extract2 >> Label(
+        "and then this") >> update
