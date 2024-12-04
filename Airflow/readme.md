@@ -47,6 +47,13 @@ airflow users create \
     --email <YourEmail>
 ```
 
+## Example DAGs or not
+By default, there will be a series of example DAGs loaded.  
+These are great for reference when just starting out, but long-term you probably don't want them.  
+Edit `airflow.cfg` and find the line `load_examples` and set it to `False` to disable them.  
+
+*if the config isn't being picked up, remember to specify the `AIRFLOW_HOME` environmental variable*
+
 ## Start Airflow Webserver and scheduler
 Launch:
 - Airflow Webserver `airflow webserver -D`
